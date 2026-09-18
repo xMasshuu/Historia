@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kelompok 5 — Sitohistologi Interaktif</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#172033;
+  --muted:#657087;
+  --paper:#f6f8fc;
+  --card:#ffffff;
+  --line:#e5eaf2;
+  --blue:#3568f4;
+  --blue-dark:#244bc0;
+  --cyan:#18b8c9;
+  --purple:#7657e8;
+  --pink:#e86da7;
+  --green:#28a879;
+  --shadow:0 18px 50px rgba(35,50,85,.10);
+  --radius:24px;
+  --bg:var(--paper);
+  --surface:var(--card);
+  --surface-2:#eef3ff;
+  --ink-soft:var(--muted);
+  --eosin:#e86da7;
+  --eosin-soft:#f7d8e7;
+  --hema:#7657e8;
+  --hema-soft:#ded8ff;
+  --hema-deep:#4936a3;
+  --border:var(--line);
+  --font-body:"DM Sans",sans-serif;
+  --font-display:"Space Grotesk",sans-serif;
+}
+* {box-sizing:border-box; margin:0; padding:0}
+html {scroll-behavior:smooth}
+button,a {transition:color .25s ease, background-color .25s ease, border-color .25s ease, box-shadow .25s ease, transform .25s ease, opacity .25s ease}
+body {
+  font-family:"DM Sans",sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 8% 0%, rgba(53,104,244,.10), transparent 28rem),
+    radial-gradient(circle at 92% 15%, rgba(118,87,232,.10), transparent 26rem),
+    var(--paper);
+  line-height:1.7;
+}
+a {color:inherit; text-decoration:none}
+button {font:inherit}
+.container {width:min(1160px, calc(100% - 36px)); margin:auto}
+.nav {
+  position:sticky; top:0; z-index:100;
+  background:rgba(246,248,252,.86);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(229,234,242,.85);
+}
+.nav-inner {height:74px; display:flex; align-items:center; justify-content:space-between; gap:24px}
+.brand {display:flex; align-items:center; gap:11px; font-family:"Space Grotesk"; font-weight:700}
+.brand-logo {display:block; width:min(190px, 34vw); max-height:52px; object-fit:contain; object-position:left center}
+.nav-links {display:flex; gap:7px; flex-wrap:wrap; justify-content:flex-end}
+.nav-links a {padding:9px 13px;border-radius:12px;color:var(--muted);font-size:14px;font-weight:600}
+.nav-links a:hover {background:#fff;color:var(--blue)}
+.menu-trigger {border:1px solid var(--line); background:#fff; color:var(--ink); padding:9px 13px; border-radius:12px; cursor:pointer; font-weight:700; display:none}
+.hero {padding:86px 0 70px}
+.hero.is-hidden {display:none}
+.project-info[hidden] {display:none}
+.project-info:not([hidden]) {animation:section-in .5s cubic-bezier(.2,.7,.2,1) both}
+.hero-grid {display:grid;grid-template-columns:1.12fr .88fr;gap:50px;align-items:center}
+.eyebrow {
+  display:inline-flex;align-items:center;gap:8px;padding:8px 13px;border:1px solid #dce5ff;
+  background:#fff;border-radius:999px;color:var(--blue);font-size:13px;font-weight:700
+}
+.eyebrow::before {content:"";width:8px;height:8px;border-radius:50%;background:var(--cyan)}
+h1,h2,h3 {font-family:"Space Grotesk",sans-serif;line-height:1.15}
+.hero h1 {font-size:clamp(42px,6vw,72px);letter-spacing:-2.5px;margin:22px 0 20px}
+.hero h1 span {
+  background:linear-gradient(90deg,var(--blue),var(--purple),var(--pink));
+  -webkit-background-clip:text;background-clip:text;color:transparent
+}
+.hero p {max-width:670px;color:var(--muted);font-size:17px}
+.hero-actions {display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.btn {display:inline-flex;align-items:center;justify-content:center;padding:13px 18px;border-radius:14px;font-weight:700}
+.btn-primary {background:var(--ink);color:white;box-shadow:0 12px 28px rgba(23,32,51,.18)}
+.btn-secondary {background:white;border:1px solid var(--line)}
+.btn:hover {transform:translateY(-3px);box-shadow:0 15px 30px rgba(35,50,85,.15)}
+.btn:active,.menu-card:active,.tabbtn:active,.quiz-opt:active {transform:translateY(0) scale(.98)}
+.hero-visual {
+  min-height:370px;border-radius:34px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);
+  position:relative;overflow:hidden;display:grid;place-items:center
+}
+.hero-visual::before,.hero-visual::after {content:"";position:absolute;border-radius:50%;filter:blur(2px)}
+.hero-visual::before {width:260px;height:260px;background:rgba(53,104,244,.12);top:-80px;right:-60px}
+.hero-visual::after {width:230px;height:230px;background:rgba(232,109,167,.12);bottom:-90px;left:-70px}
+.cell-art {width:250px;height:250px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0 7%,#dbe8ff 8% 23%,#b9d0ff 24% 46%,#86a9ff 47% 70%,#5c79df 71%);border:10px solid #edf3ff;box-shadow:inset 0 0 35px rgba(45,67,130,.22),0 25px 50px rgba(54,78,145,.20);position:relative;z-index:2;animation:cell-float 5s ease-in-out infinite}
+.cell-art::before {content:"";position:absolute;width:86px;height:86px;border-radius:50%;background:radial-gradient(circle,#b99aff,#7657e8);left:74px;top:72px;box-shadow:0 0 0 12px rgba(255,255,255,.22)}
+.cell-art::after {content:"";position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;left:108px;top:106px;box-shadow:0 0 18px #fff}
+.float-tag {position:absolute;z-index:3;background:#fff;border:1px solid var(--line);box-shadow:0 10px 25px rgba(35,50,85,.10);padding:9px 12px;border-radius:12px;font-size:12px;font-weight:700}
+.tag-1 {top:75px;left:30px} .tag-2 {right:25px;top:150px} .tag-3 {bottom:60px;left:55px}
+.section {padding:78px 0}
+.section-head {max-width:760px;margin-bottom:30px}
+.kicker {color:var(--blue);font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:1.3px;margin-bottom:9px}
+.section-head h2 {font-size:clamp(30px,4vw,45px);letter-spacing:-1.2px;margin-bottom:12px}
+.section-head p {color:var(--muted)}
+.grid-2 {display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.grid-4 {display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.card {
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:25px;
+  box-shadow:0 8px 28px rgba(35,50,85,.055)
+}
+.card {transition:transform .3s cubic-bezier(.2,.7,.2,1), box-shadow .3s ease}
+.card:hover {transform:translateY(-5px);box-shadow:var(--shadow)}
+.compare-card {position:relative;overflow:hidden}
+.compare-card::before {content:"";position:absolute;inset:0 auto 0 0;width:5px;background:var(--blue)}
+.compare-card:nth-child(2)::before {background:var(--purple)}
+.icon {width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:#eef3ff;color:var(--blue);font-weight:800;margin-bottom:16px}
+.card h3 {font-size:22px;margin-bottom:9px}
+.card p,.card li {color:var(--muted);font-size:14px}
+.card ul {padding-left:19px;margin-top:13px}
+.tissue-tabs {display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.tissue-tabs button {
+  border:1px solid var(--line);background:#fff;padding:11px 16px;border-radius:13px;cursor:pointer;font-weight:700;color:var(--muted)
+}
+.tissue-tabs button.active {background:var(--ink);color:#fff;border-color:var(--ink)}
+.tissue-panel {display:none}
+.tissue-panel.active {display:grid;animation:panel-in .45s cubic-bezier(.2,.7,.2,1) both}
+.stain-grid {display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.stain-card {display:grid;grid-template-columns:95px 1fr;gap:20px;align-items:center}
+.stain-swatch {height:125px;border-radius:18px;background:linear-gradient(160deg,#5d3c9d,#a66cd4 45%,#f3a8bd)}
+.stain-card:nth-child(2) .stain-swatch {background:linear-gradient(160deg,#284b9b,#5a6fd0 48%,#f4a0b9)}
+.cell-section {background:linear-gradient(135deg,#101827,#1d2940);color:#fff;border-radius:34px;padding:42px;overflow:hidden}
+.cell-section .section-head p {color:#b8c2d5}
+.cell-layout {display:grid;grid-template-columns:.8fr 1.2fr;gap:28px;align-items:center}
+.cell-frame {background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:25px;padding:22px;text-align:center}
+.cell-frame svg {max-width:100%;height:auto}
+.quiz {background:#fff;border:1px solid var(--line);border-radius:30px;padding:30px;box-shadow:var(--shadow)}
+.quiz-question {font-size:22px;font-family:"Space Grotesk";font-weight:700;margin-bottom:20px}
+.quiz-options {display:grid;gap:10px}
+.quiz-options button {
+  text-align:left;border:1px solid var(--line);background:#f9fafc;border-radius:14px;padding:13px 15px;cursor:pointer;color:var(--ink)
+}
+.quiz-options button:hover {border-color:#b8c8f7;background:#f2f5ff}
+.quiz-feedback {margin-top:18px;padding:14px;border-radius:14px;display:none}
+.glossary {display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.term {background:#fff;border:1px solid var(--line);border-radius:18px;padding:19px}
+.term strong {display:block;margin-bottom:6px;font-family:"Space Grotesk"}
+.term span {font-size:13px;color:var(--muted)}
+footer {padding:45px 0 55px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+footer strong {color:var(--ink)}
+.wrap {width:min(1080px, calc(100% - 36px)); margin:auto}
+section {padding:78px 0}
+.container > header.hero,.container > footer {display:none}
+.section-head {max-width:760px; margin-bottom:30px}
+.section-head .kicker {color:var(--blue); font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:1.3px; margin-bottom:9px}
+.section-head h2 {font-size:clamp(30px,4vw,45px); letter-spacing:-1.2px; margin-bottom:12px}
+.section-head p {color:var(--muted)}
+.compare {display:grid; grid-template-columns:repeat(2,1fr); gap:20px}
+.compare-card {position:relative; overflow:hidden; background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:25px; box-shadow:0 8px 28px rgba(35,50,85,.055)}
+.compare-card::before {content:""; position:absolute; inset:0 auto 0 0; width:5px; background:var(--blue)}
+.compare-card:nth-child(2)::before {background:var(--purple)}
+.compare-card h3,.tissue-text h3,.stain-card h3,.info-panel h4,.quiz-q {font-family:var(--font-display); line-height:1.15}
+.compare-card h3 {font-size:22px; margin-bottom:9px}
+.compare-card p,.compare-card li,.tissue-text p,.feature-list li,.stain-card p {color:var(--muted); font-size:14px}
+.compare-card ul {padding-left:19px; margin-top:13px}
+.tag {display:inline-block; padding:5px 11px; border-radius:999px; font-size:12px; font-weight:800; margin-bottom:14px}
+.tag-cyto {background:#f7d8e7; color:#a52c65}
+.tag-histo {background:#ded8ff; color:#4936a3}
+.tabbar {display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; border:0}
+.tabbtn {border:1px solid var(--line); background:#fff; padding:11px 16px; border-radius:13px; cursor:pointer; font-weight:700; color:var(--muted); font-family:var(--font-body)}
+.tabbtn:hover {border-color:#b8c8f7; color:var(--blue)}
+.tabbtn.active {background:var(--ink); color:#fff; border-color:var(--ink)}
+.tissue-panel {display:none; grid-template-columns:.9fr 1.1fr; gap:28px; align-items:center}
+.tissue-panel.active {display:grid}
+.tissue-art,.cell-svg-box {background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:18px; box-shadow:0 8px 28px rgba(35,50,85,.055)}
+.tissue-art {aspect-ratio:4/3; display:flex; align-items:center; justify-content:center}
+.tissue-art svg {width:100%; height:auto}
+.tissue-text h3 {font-size:28px; margin-bottom:7px}
+.tissue-text .loc {font-size:13px; font-weight:700; color:var(--blue); margin-bottom:14px}
+.tissue-text p {margin-bottom:14px}
+.feature-list {display:flex; flex-direction:column; gap:9px; list-style:none; padding:0; margin:0}
+.feature-list li {position:relative; padding-left:16px}
+.feature-list li::before {content:""; width:6px; height:6px; border-radius:50%; background:var(--cyan); position:absolute; left:0; top:9px}
+.stain-card {display:block; background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:25px; box-shadow:0 8px 28px rgba(35,50,85,.055)}
+.stain-card h3 {font-size:22px; margin-bottom:5px}
+.stain-card .use {font-size:13px; color:var(--blue); font-weight:700; margin-bottom:14px}
+.swatch-row {display:flex; gap:10px; margin:16px 0 18px}
+.swatch {flex:1; min-height:48px; border-radius:12px; display:flex; align-items:flex-end; padding:7px; font-size:11px; color:#fff; font-weight:700}
+.cell-wrap {display:grid; grid-template-columns:1.1fr .9fr; gap:28px; align-items:start}
+.cell-svg-box svg {width:100%; height:auto}
+.organelle {cursor:pointer; transition:opacity .15s, filter .15s}
+.organelle:hover {opacity:.8; filter:drop-shadow(0 0 4px rgba(24,184,201,.7))}
+.info-panel {background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:25px; min-height:220px; box-shadow:0 8px 28px rgba(35,50,85,.055)}
+.info-panel {transition:transform .3s ease, box-shadow .3s ease}
+.info-panel h4 {font-size:22px; margin-bottom:10px}
+.info-panel p,.info-hint {color:var(--muted); font-size:14px}
+.info-hint {margin-top:12px; font-style:italic}
+.quiz-card {background:var(--card); border:1px solid var(--line); border-radius:30px; padding:30px; max-width:680px; box-shadow:var(--shadow)}
+.quiz-progress {font-size:13px; color:var(--muted); margin-bottom:10px}
+.quiz-q {font-size:22px; font-weight:700; margin-bottom:20px}
+.quiz-opts {display:grid; gap:10px}
+.quiz-opt {text-align:left; border:1px solid var(--line); background:#f9fafc; border-radius:14px; padding:13px 15px; cursor:pointer; color:var(--ink); transition:.2s}
+.quiz-opt:hover {border-color:#b8c8f7; background:#f2f5ff}
+.quiz-opt.correct {border-color:var(--green); background:#eaf8f2}
+.quiz-opt.wrong {border-color:var(--pink); background:#fff0f6}
+.quiz-opt[disabled] {cursor:default}
+.quiz-feedback {margin-top:18px; color:var(--muted); min-height:1.5em; font-size:14px}
+.quiz-nav {margin-top:20px; display:flex; justify-content:space-between; align-items:center}
+.quiz-score {font-family:var(--font-display); font-size:30px; margin-bottom:8px}
+.gloss {border-top:1px solid var(--line)}
+.gloss-item {border-bottom:1px solid var(--line)}
+.gloss-q {width:100%; text-align:left; background:none; border:0; cursor:pointer; padding:16px 0; color:var(--ink); display:flex; justify-content:space-between; align-items:center; gap:12px}
+.gloss-plus {font-size:20px; color:var(--muted); transition:transform .2s}
+.gloss-item.open .gloss-plus {transform:rotate(45deg)}
+.gloss-a {max-height:0; overflow:hidden; transition:max-height .25s ease}
+.gloss-item.open .gloss-a {max-height:200px}
+.gloss-a p {color:var(--muted); font-size:14px; margin:0 0 16px}
+.hero > .container > div:first-child,.hero-visual,.menu-heading {animation:fade-up .7s cubic-bezier(.2,.7,.2,1) both}
+.hero-visual {animation-delay:.12s}
+.menu-card {animation:fade-up .6s cubic-bezier(.2,.7,.2,1) both}
+.menu-card:nth-child(2) {animation-delay:.06s}
+.menu-card:nth-child(3) {animation-delay:.12s}
+.menu-card:nth-child(4) {animation-delay:.18s}
+.menu-card:nth-child(5) {animation-delay:.24s}
+.menu-card:nth-child(6) {animation-delay:.30s}
+.learning-section:not([hidden]) {animation:section-in .5s cubic-bezier(.2,.7,.2,1) both}
+@keyframes fade-up {from {opacity:0; transform:translateY(18px)} to {opacity:1; transform:translateY(0)}}
+@keyframes section-in {from {opacity:0; transform:translateY(12px)} to {opacity:1; transform:translateY(0)}}
+@keyframes panel-in {from {opacity:0; transform:translateY(10px)} to {opacity:1; transform:translateY(0)}}
+@keyframes cell-float {0%,100% {transform:translateY(0) rotate(-1deg)} 50% {transform:translateY(-10px) rotate(1deg)}}
+@keyframes brand-breathe {0%,100% {transform:scale(1)} 50% {transform:scale(1.05)}}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {animation-duration:.01ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; transition-duration:.01ms !important}
+}
+.main-menu {background:#fff; margin:0 calc((1080px - 100vw) / 2); padding:70px max(25px, calc((100vw - 1080px) / 2)) 78px}
+.main-menu[hidden],.learning-section[hidden] {display:none}
+.menu-heading {display:block; max-width:1200px; text-align:center; margin:0 auto 40px}
+.menu-heading > div {display:block}
+.menu-heading .kicker {color:#0d9294; letter-spacing:2px; font-size:11px; margin-bottom:10px}
+.menu-heading h2 {font-size:clamp(30px,4vw,40px); letter-spacing:-1px; margin:0 0 12px; color:#173b45}
+.menu-heading p {color:#789198; max-width:48ch; margin:auto; font-size:14px}
+.menu-grid {display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+.menu-card {position:relative; overflow:hidden; border:1px solid #e2eff0; background:#f8fcfc; color:#173b45; border-radius:20px; padding:27px; text-align:left; cursor:pointer; min-height:190px; box-shadow:none; transition:transform .35s ease, border-color .35s ease, box-shadow .35s ease}
+.menu-card::after {content:""; position:absolute; width:90px; height:90px; border-radius:50%; right:-30px; bottom:-30px; background:var(--menu-accent,#e7f7f7); opacity:.8; transition:transform .35s}
+.menu-card:hover {transform:translateY(-8px); border-color:#b9dfe1; box-shadow:0 18px 35px rgba(20,90,95,.10)}
+.menu-card:hover::after {transform:scale(1.35)}
+.menu-card strong {display:block; position:relative; z-index:1; font-family:var(--font-display); font-size:17px; margin:0 0 8px}
+.menu-card span:not(.menu-icon) {display:block; position:relative; z-index:1; color:#789198; font-size:13px; line-height:1.7; max-width:28ch}
+.menu-card::before {content:"→"; position:absolute; z-index:2; right:22px; top:28px; color:#0d9294; font-size:22px; opacity:1; transition:transform .2s}
+.menu-card:hover::before {transform:translateX(4px)}
+.menu-icon {position:relative; z-index:1; width:53px; height:53px; display:grid; place-items:center; border-radius:15px; background:var(--menu-accent,#e3f6f5); color:var(--menu-color,#0d9294); font-weight:800; font-size:24px; margin-bottom:20px}
+.menu-card:nth-child(1) {--menu-accent:#e3f6f5; --menu-color:#0d9294}
+.menu-card:nth-child(2) {--menu-accent:#e8e4ff; --menu-color:#7657e8}
+.menu-card:nth-child(3) {--menu-accent:#ffe6ef; --menu-color:#c94d82}
+.menu-card:nth-child(4) {--menu-accent:#e3f6f5; --menu-color:#0d9294}
+.menu-card:nth-child(5) {--menu-accent:#fff0d9; --menu-color:#b96d14}
+.menu-card:nth-child(6) {--menu-accent:#e5f5eb; --menu-color:#21835f}
+.section-back {display:flex; justify-content:flex-start; margin-bottom:22px}
+.back-to-menu {border:0; background:transparent; color:var(--blue); font-weight:800; cursor:pointer; padding:0;}
+.back-to-menu:hover {text-decoration:underline}
+@media (max-width:760px) {
+  .compare,.stain-grid,.cell-wrap,.tissue-panel.active {grid-template-columns:1fr}
+  .tissue-art {aspect-ratio:auto; min-height:220px}
+  .nav-inner {height:auto; padding:12px 0}
+  .nav-links {display:none}
+  .menu-trigger {display:block}
+  .menu-heading {display:block}
+  .menu-heading p {margin-top:7px}
+  .menu-grid {grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:480px) {
+  .main-menu {margin:0 -12px; padding-left:18px; padding-right:18px}
+  .menu-grid {grid-template-columns:1fr}
+}
+@media(max-width:900px) {
+  .hero-grid,.cell-layout {grid-template-columns:1fr}
+  .grid-4 {grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:650px) {
+  .container {width:min(100% - 24px,1160px)}
+  .nav-inner {height:auto;padding:12px 0;align-items:flex-start}
+  .nav-links {display:none}
+  .hero {padding:55px 0 35px}
+  .hero h1 {font-size:43px}
+  .grid-2,.stain-grid,.grid-4,.glossary {grid-template-columns:1fr}
+  .cell-section {padding:25px}
+}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="container nav-inner">
+    <a href="#top" class="brand" aria-label="HISTORIA"><img class="brand-logo" src="logo.png" alt="HISTORIA"></a>
+    <nav class="nav-links">
+      <a href="#menuUtama">Pembelajaran</a>
+      <a href="#anggota">Anggota</a>
+      <a href="#tujuan-project">Tujuan project</a>
+      <a href="#tentang-project">Tentang project</a>
+    </nav>
+    <button class="menu-trigger" type="button" data-open-menu>Menu utama</button>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="eyebrow">Media belajar sitohistoteknologi</div>
+      <h1>Menjelajahi <span>Sel & Jaringan</span> dengan cara yang lebih visual.</h1>
+      <p>Pelajari konsep sitologi dan histologi, empat jaringan dasar, pewarnaan, struktur sel, serta uji pemahaman melalui kuis interaktif.</p>
+    </div>
+    <div class="hero-visual" aria-label="Ilustrasi sel">
+      <div class="float-tag tag-1">Nukleus</div>
+      <div class="float-tag tag-2">Membran sel</div>
+      <div class="float-tag tag-3">Organel</div>
+      <div class="cell-art"></div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+
+<section class="main-menu" id="menuUtama">
+  <div class="menu-heading">
+    <div>
+      <p class="kicker">Main menu</p>
+      <h2>Jelajahi Pembelajaran</h2>
+    </div>
+    <p>Pilih materi yang ingin kamu pelajari. Setiap topik akan terbuka sebagai jendela belajar tersendiri.</p>
+  </div>
+  <div class="menu-grid">
+    <button class="menu-card" type="button" data-open-view="apa-itu"><span class="menu-icon">🔬</span><strong>Sitologi &amp; Histologi</strong><span>Kenali sel, jaringan, dan hubungan keduanya dalam tubuh.</span></button>
+    <button class="menu-card" type="button" data-open-view="jaringan"><span class="menu-icon">🧫</span><strong>Empat Jaringan Dasar</strong><span>Jelajahi epitel, ikat, otot, dan saraf secara mikroskopis.</span></button>
+    <button class="menu-card" type="button" data-open-view="pewarnaan"><span class="menu-icon">📚</span><strong>Pewarnaan</strong><span>Pahami fungsi HE dan Papanicolaou pada pemeriksaan.</span></button>
+    <button class="menu-card" type="button" data-open-view="sel"><span class="menu-icon">🧪</span><strong>Struktur Sel</strong><span>Klik organel untuk mengenal fungsi setiap bagian sel.</span></button>
+    <button class="menu-card" type="button" data-open-view="kuis"><span class="menu-icon">📝</span><strong>Kuis</strong><span>Uji pemahaman materi melalui pertanyaan interaktif.</span></button>
+    <button class="menu-card" type="button" data-open-view="glosarium"><span class="menu-icon">ℹ️</span><strong>Glosarium</strong><span>Buka istilah penting dalam sitohistologi dengan cepat.</span></button>
+  </div>
+</section>
+
+<section class="project-info" id="anggota" hidden>
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">Kolaborasi</p>
+      <h2>Anggota project</h2>
+      <p>Project ini dikembangkan bersama oleh tim pembelajar yang tertarik pada sitologi, histologi, dan media pembelajaran interaktif.</p>
+    </div>
+  </div>
+</section>
+
+<section class="project-info" id="tujuan-project" hidden>
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">Arah pembelajaran</p>
+      <h2>Tujuan project</h2>
+      <p>Membantu pengguna memahami konsep dasar sitohistologi melalui materi ringkas, visual, dan interaksi yang mudah dijelajahi secara mandiri.</p>
+    </div>
+  </div>
+</section>
+
+<section class="project-info" id="tentang-project" hidden>
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">Mengenal platform</p>
+      <h2>Tentang project</h2>
+      <p>SitoHistoLearn adalah media belajar digital yang merangkum sitologi, histologi, jaringan dasar, pewarnaan, struktur sel, dan kuis dalam satu pengalaman interaktif.</p>
+    </div>
+  </div>
+</section>
+
+
+
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow">Materi biologi sel &amp; jaringan</p>
+      <h1 class="hero-title">Dunia yang hanya terlihat lewat <em>lensa mikroskop</em></h1>
+      <p class="hero-sub">Sitohistologi mempelajari dua skala kehidupan sekaligus: sel tunggal (sitologi) dan susunan sel yang membentuk jaringan (histologi). Halaman ini merangkumnya jadi materi yang bisa dijelajahi, bukan sekadar dihafal.</p>
+      <div class="cta-row">
+        <a href="#jaringan" class="btn btn-primary">Jelajahi 4 jaringan dasar</a>
+        <a href="#kuis" class="btn btn-ghost">Uji pemahaman</a>
+      </div>
+    </div>
+    <div class="scope">
+      <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="200" cy="200" r="188" fill="var(--surface)" stroke="var(--border)"/>
+        <g class="scope-ring" style="transform-origin:200px 200px;">
+          <circle cx="200" cy="200" r="170" fill="none" stroke="var(--hema-soft)" stroke-width="1" stroke-dasharray="2 10"/>
+        </g>
+        <g class="cell-pulse">
+          <ellipse cx="200" cy="200" rx="120" ry="105" fill="var(--eosin-soft)" opacity="0.5"/>
+          <ellipse cx="160" cy="175" rx="42" ry="38" fill="var(--hema)" opacity="0.85"/>
+          <circle cx="150" cy="168" r="9" fill="var(--hema-deep)"/>
+          <ellipse cx="252" cy="235" rx="30" ry="26" fill="var(--hema-soft)"/>
+          <circle cx="255" cy="230" r="7" fill="var(--hema)"/>
+          <ellipse cx="215" cy="255" rx="20" ry="17" fill="var(--eosin)" opacity="0.7"/>
+        </g>
+        <circle cx="200" cy="200" r="120" fill="none" stroke="var(--ink)" stroke-width="1.5" opacity="0.25"/>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<section id="apa-itu" class="learning-section" hidden>
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">Dua cabang, satu ilmu</p>
+      <h2>Sitologi vs histologi: apa bedanya?</h2>
+      <p>Keduanya sering disebut bersamaan karena saling melengkapi — sitologi memperbesar satu sel, histologi memperlihatkan bagaimana sel-sel itu tersusun jadi jaringan yang bekerja sama.</p>
+    </div>
+    <div class="compare">
+      <div class="compare-card">
+        <span class="tag tag-cyto">Sitologi</span>
+        <h3>Ilmu tentang sel tunggal</h3>
+        <p>Mempelajari struktur, fungsi, dan proses di dalam satu sel — dari membran hingga organel-organelnya. Sering dipakai untuk skrining, misalnya deteksi sel abnormal pada tes Pap smear.</p>
+        <ul>
+          <li>Fokus: satu sel, dilihat lepas dari jaringannya</li>
+          <li>Sampel: cairan tubuh, kerokan, aspirasi jarum halus</li>
+          <li>Contoh manfaat: deteksi dini kanker serviks</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <span class="tag tag-histo">Histologi</span>
+        <h3>Ilmu tentang susunan jaringan</h3>
+        <p>Mempelajari bagaimana sel-sel sejenis tersusun dan bekerja sama membentuk jaringan, lalu organ. Sampelnya berupa potongan jaringan utuh yang diiris tipis.</p>
+        <ul>
+          <li>Fokus: susunan dan hubungan antarsel dalam jaringan</li>
+          <li>Sampel: potongan biopsi, spesimen operasi</li>
+          <li>Contoh manfaat: diagnosis kelainan pada organ</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="jaringan" class="learning-section" hidden>
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">Fondasi histologi</p>
+      <h2>Empat jaringan dasar tubuh</h2>
+      <p>Semua organ tubuh manusia tersusun dari kombinasi empat jenis jaringan ini. Pilih salah satu untuk melihat ciri dan contohnya.</p>
+    </div>
+
+    <div class="tabbar" id="tissueTabs">
+      <button class="tabbtn active" data-tab="epitel">Epitel</button>
+      <button class="tabbtn" data-tab="ikat">Ikat</button>
+      <button class="tabbtn" data-tab="otot">Otot</button>
+      <button class="tabbtn" data-tab="saraf">Saraf</button>
+    </div>
+
+    <div class="tissue-panel active" id="panel-epitel">
+      <div class="tissue-art">
+        <svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="150" width="280" height="10" fill="var(--hema)" opacity="0.5"/>
+          <g>
+            <polygon points="20,150 60,150 65,110 15,110" fill="var(--eosin-soft)" stroke="var(--ink)" stroke-opacity="0.15"/>
+            <polygon points="60,150 100,150 105,108 65,110" fill="var(--eosin)" opacity="0.7" stroke="var(--ink)" stroke-opacity="0.15"/>
+            <polygon points="100,150 140,150 143,112 105,108" fill="var(--eosin-soft)" stroke="var(--ink)" stroke-opacity="0.15"/>
+            <polygon points="140,150 180,150 182,109 143,112" fill="var(--eosin)" opacity="0.7" stroke="var(--ink)" stroke-opacity="0.15"/>
+            <polygon points="180,150 220,150 222,111 182,109" fill="var(--eosin-soft)" stroke="var(--ink)" stroke-opacity="0.15"/>
+            <polygon points="220,150 260,150 262,110 222,111" fill="var(--eosin)" opacity="0.7" stroke="var(--ink)" stroke-opacity="0.15"/>
+            <polygon points="260,150 290,150 288,112 262,110" fill="var(--eosin-soft)" stroke="var(--ink)" stroke-opacity="0.15"/>
+          </g>
+          <circle cx="40" cy="132" r="8" fill="var(--hema-deep)"/>
+          <circle cx="82" cy="130" r="8" fill="var(--hema-deep)"/>
+          <circle cx="122" cy="131" r="8" fill="var(--hema-deep)"/>
+          <circle cx="161" cy="129" r="8" fill="var(--hema-deep)"/>
+          <circle cx="201" cy="130" r="8" fill="var(--hema-deep)"/>
+          <circle cx="240" cy="131" r="8" fill="var(--hema-deep)"/>
+          <circle cx="275" cy="131" r="8" fill="var(--hema-deep)"/>
+          <text x="150" y="185" text-anchor="middle" font-size="11" fill="var(--ink-soft)" font-family="sans-serif">membran basal</text>
+        </svg>
+      </div>
+      <div class="tissue-text">
+        <h3>Jaringan epitel</h3>
+        <p class="loc">Kulit, saluran pencernaan, kelenjar, pembuluh darah</p>
+        <p>Sel-selnya tersusun rapat tanpa banyak ruang antarsel, membentuk lapisan yang menutupi permukaan tubuh atau melapisi rongga organ. Duduk di atas membran basal yang memisahkannya dari jaringan ikat di bawahnya.</p>
+        <ul class="feature-list">
+          <li>Sel tersusun sangat rapat, hampir tanpa matriks ekstraseluler</li>
+          <li>Diklasifikasikan dari bentuk sel (pipih, kubus, silindris) dan jumlah lapisan (simpel/berlapis)</li>
+          <li>Berfungsi sebagai proteksi, sekresi, absorpsi, atau filtrasi</li>
+          <li>Punya kemampuan regenerasi tinggi karena sering terpapar gesekan</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tissue-panel" id="panel-ikat">
+      <div class="tissue-art">
+        <svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10,60 C80,20 120,100 190,50 S280,90 295,40" fill="none" stroke="var(--eosin-soft)" stroke-width="4"/>
+          <path d="M5,120 C70,160 130,110 200,150 S270,120 298,160" fill="none" stroke="var(--eosin-soft)" stroke-width="3"/>
+          <path d="M20,180 C90,150 150,200 230,170 S280,190 295,170" fill="none" stroke="var(--eosin-soft)" stroke-width="3"/>
+          <g>
+            <path d="M90,90 l-14,-10 M90,90 l16,-8 M90,90 l-4,17 M90,90 l14,12 M90,90 l-16,6" stroke="var(--hema)" stroke-width="2"/>
+            <ellipse cx="90" cy="90" rx="11" ry="9" fill="var(--hema)"/>
+            <circle cx="90" cy="90" r="4" fill="var(--hema-deep)"/>
+          </g>
+          <g>
+            <path d="M205,120 l-15,-9 M205,120 l17,-6 M205,120 l-2,18 M205,120 l15,10" stroke="var(--hema)" stroke-width="2"/>
+            <ellipse cx="205" cy="120" rx="10" ry="8" fill="var(--hema)"/>
+            <circle cx="205" cy="120" r="3.5" fill="var(--hema-deep)"/>
+          </g>
+          <circle cx="140" cy="160" r="5" fill="var(--hema-soft)"/>
+          <circle cx="250" cy="70" r="5" fill="var(--hema-soft)"/>
+          <circle cx="50" cy="150" r="5" fill="var(--hema-soft)"/>
+        </svg>
+      </div>
+      <div class="tissue-text">
+        <h3>Jaringan ikat</h3>
+        <p class="loc">Tendon, tulang rawan, tulang, darah, lemak</p>
+        <p>Kebalikan dari epitel — selnya jarang, tersebar di dalam matriks ekstraseluler yang justru mendominasi volume jaringan. Matriks inilah yang menentukan sifat jaringan: bisa lentur seperti tendon, keras seperti tulang, atau cair seperti darah.</p>
+        <ul class="feature-list">
+          <li>Terdiri dari sel (fibroblas, dsb) dan matriks ekstraseluler (serat + zat dasar)</li>
+          <li>Serat utama: kolagen (kuat), elastin (lentur), retikuler (penyokong halus)</li>
+          <li>Variannya sangat luas: ikat longgar, ikat padat, kartilago, tulang, darah</li>
+          <li>Fungsi utama: menyokong, menghubungkan, dan melindungi organ lain</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tissue-panel" id="panel-otot">
+      <div class="tissue-art">
+        <svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <rect x="15" y="55" width="270" height="26" rx="13" fill="var(--eosin)" opacity="0.75"/>
+            <rect x="15" y="97" width="270" height="26" rx="13" fill="var(--eosin)" opacity="0.75"/>
+            <rect x="15" y="139" width="270" height="26" rx="13" fill="var(--eosin)" opacity="0.75"/>
+            <g stroke="var(--hema-deep)" stroke-width="2" opacity="0.55">
+              <line x1="35" y1="55" x2="35" y2="81"/><line x1="55" y1="55" x2="55" y2="81"/><line x1="75" y1="55" x2="75" y2="81"/>
+              <line x1="95" y1="55" x2="95" y2="81"/><line x1="115" y1="55" x2="115" y2="81"/><line x1="135" y1="55" x2="135" y2="81"/>
+              <line x1="155" y1="55" x2="155" y2="81"/><line x1="175" y1="55" x2="175" y2="81"/><line x1="195" y1="55" x2="195" y2="81"/>
+              <line x1="215" y1="55" x2="215" y2="81"/><line x1="235" y1="55" x2="235" y2="81"/><line x1="255" y1="55" x2="255" y2="81"/>
+              <line x1="35" y1="97" x2="35" y2="123"/><line x1="55" y1="97" x2="55" y2="123"/><line x1="75" y1="97" x2="75" y2="123"/>
+              <line x1="95" y1="97" x2="95" y2="123"/><line x1="115" y1="97" x2="115" y2="123"/><line x1="135" y1="97" x2="135" y2="123"/>
+              <line x1="155" y1="97" x2="155" y2="123"/><line x1="175" y1="97" x2="175" y2="123"/><line x1="195" y1="97" x2="195" y2="123"/>
+              <line x1="215" y1="97" x2="215" y2="123"/><line x1="235" y1="97" x2="235" y2="123"/><line x1="255" y1="97" x2="255" y2="123"/>
+            </g>
+            <ellipse cx="45" cy="68" rx="6" ry="4" fill="var(--hema)"/>
+            <ellipse cx="120" cy="68" rx="6" ry="4" fill="var(--hema)"/>
+            <ellipse cx="200" cy="68" rx="6" ry="4" fill="var(--hema)"/>
+            <ellipse cx="80" cy="110" rx="6" ry="4" fill="var(--hema)"/>
+            <ellipse cx="180" cy="110" rx="6" ry="4" fill="var(--hema)"/>
+          </g>
+          <ellipse cx="150" cy="188" rx="45" ry="14" fill="var(--eosin-soft)"/>
+          <ellipse cx="150" cy="188" rx="6" ry="8" fill="var(--hema)"/>
+          <text x="150" y="212" text-anchor="middle" font-size="10" fill="var(--ink-soft)" font-family="sans-serif">otot polos (bawah), rangka bergaris (atas)</text>
+        </svg>
+      </div>
+      <div class="tissue-text">
+        <h3>Jaringan otot</h3>
+        <p class="loc">Otot rangka, dinding organ dalam, jantung</p>
+        <p>Jaringan yang bisa berkontraksi karena mengandung protein aktin dan miosin. Ada tiga jenis dengan karakter berbeda: rangka (bergaris, sadar), polos (halus, tak sadar), dan jantung (bergaris, tak sadar).</p>
+        <ul class="feature-list">
+          <li>Otot rangka: sel panjang berinti banyak di tepi, bergaris jelas, dikendalikan sadar</li>
+          <li>Otot polos: sel gelendong berinti satu di tengah, tanpa garis, bekerja otomatis</li>
+          <li>Otot jantung: bergaris, bercabang, punya diskus interkalaris penghubung sel</li>
+          <li>Kontraksi terjadi lewat pemendekan filamen aktin-miosin</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tissue-panel" id="panel-saraf">
+      <div class="tissue-art">
+        <svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+          <g stroke="var(--hema)" stroke-width="2" fill="none">
+            <path d="M95,70 L60,40"/><path d="M95,70 L60,60"/><path d="M95,75 L55,80"/>
+            <path d="M95,80 L60,105"/><path d="M100,60 L80,25"/>
+          </g>
+          <ellipse cx="105" cy="90" rx="26" ry="22" fill="var(--eosin)" opacity="0.85"/>
+          <circle cx="105" cy="88" r="9" fill="var(--hema-deep)"/>
+          <path d="M128,95 C170,110 210,110 260,120" stroke="var(--hema)" stroke-width="3" fill="none"/>
+          <ellipse cx="160" cy="107" rx="10" ry="6" fill="var(--eosin-soft)" opacity="0.9"/>
+          <ellipse cx="190" cy="112" rx="10" ry="6" fill="var(--eosin-soft)" opacity="0.9"/>
+          <ellipse cx="220" cy="117" rx="10" ry="6" fill="var(--eosin-soft)" opacity="0.9"/>
+          <path d="M260,120 L280,105 M260,120 L285,120 M260,120 L280,138" stroke="var(--hema)" stroke-width="2" fill="none"/>
+          <text x="105" y="130" text-anchor="middle" font-size="10" fill="var(--ink-soft)" font-family="sans-serif">badan sel</text>
+          <text x="220" y="145" text-anchor="middle" font-size="10" fill="var(--ink-soft)" font-family="sans-serif">akson bermielin</text>
+        </svg>
+      </div>
+      <div class="tissue-text">
+        <h3>Jaringan saraf</h3>
+        <p class="loc">Otak, sumsum tulang belakang, saraf tepi</p>
+        <p>Dirancang untuk menghantarkan sinyal listrik dengan cepat ke seluruh tubuh. Unit fungsionalnya adalah neuron, dibantu sel glia yang memberi dukungan struktural dan metabolik.</p>
+        <ul class="feature-list">
+          <li>Dendrit menerima sinyal, badan sel memprosesnya, akson mengirimkannya</li>
+          <li>Selubung mielin pada akson mempercepat penghantaran impuls</li>
+          <li>Sel glia (mis. astrosit, sel Schwann) mendukung dan melindungi neuron</li>
+          <li>Neuron dewasa umumnya tidak lagi membelah diri</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pewarnaan" class="learning-section" hidden>
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">Supaya sel terlihat</p>
+      <h2>Kenapa perlu pewarnaan?</h2>
+      <p>Sel dan jaringan hampir transparan di bawah mikroskop cahaya biasa. Pewarna kimiawi dipakai supaya struktur di dalamnya jadi kontras dan bisa dibedakan.</p>
+    </div>
+    <div class="stain-grid">
+      <div class="stain-card">
+        <h3>Hematoksilin–Eosin (HE)</h3>
+        <p class="use">Standar baku histologi</p>
+        <div class="swatch-row">
+          <div class="swatch" style="background:var(--hema);">Hematoksilin → inti sel</div>
+          <div class="swatch" style="background:var(--eosin);">Eosin → sitoplasma &amp; matriks</div>
+        </div>
+        <p>Hematoksilin bersifat basa dan mengikat asam nukleat di inti sel, menghasilkan warna ungu-biru. Eosin bersifat asam dan mengikat protein di sitoplasma serta serat jaringan ikat, menghasilkan warna merah muda. Kombinasi ini memberi kontras yang cukup untuk melihat hampir semua struktur jaringan.</p>
+      </div>
+      <div class="stain-card">
+        <h3>Papanicolaou (Pap)</h3>
+        <p class="use">Standar sitologi, mis. Pap smear</p>
+        <div class="swatch-row">
+          <div class="swatch" style="background:var(--hema-deep);">Inti transparan-tajam</div>
+          <div class="swatch" style="background:#4E9E7A;">Sitoplasma hijau/oranye</div>
+        </div>
+        <p>Menggunakan beberapa pewarna sekaligus agar detail inti terlihat sangat tajam, sementara warna sitoplasma bisa menunjukkan tingkat kematangan sel. Cocok untuk skrining sel lepas, seperti pada tes Pap smear untuk deteksi dini kelainan sel serviks.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sel" class="learning-section" hidden>
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">Zoom ke dalam sitologi</p>
+      <h2>Struktur sel di bawah mikroskop</h2>
+      <p>Klik salah satu bagian sel untuk melihat penjelasannya.</p>
+    </div>
+    <div class="cell-wrap">
+      <div class="cell-svg-box">
+        <svg viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="200" cy="165" rx="175" ry="135" fill="var(--eosin-soft)" opacity="0.35" class="organelle" data-organ="membran"/>
+          <ellipse cx="200" cy="165" rx="175" ry="135" fill="none" stroke="var(--ink)" stroke-opacity="0.3" stroke-width="2" class="organelle" data-organ="membran"/>
+
+          <ellipse cx="150" cy="150" rx="62" ry="52" fill="var(--hema)" class="organelle" data-organ="nukleus"/>
+          <circle cx="165" cy="140" r="14" fill="var(--hema-deep)" class="organelle" data-organ="nukleolus"/>
+
+          <g class="organelle" data-organ="re-kasar">
+            <path d="M235,120 q20,-14 40,0 q20,14 40,0" fill="none" stroke="var(--eosin)" stroke-width="4"/>
+            <path d="M235,132 q20,-14 40,0 q20,14 40,0" fill="none" stroke="var(--eosin)" stroke-width="4"/>
+            <path d="M235,144 q20,-14 40,0 q20,14 40,0" fill="none" stroke="var(--eosin)" stroke-width="4"/>
+            <circle cx="245" cy="118" r="2.2" fill="var(--hema-deep)"/>
+            <circle cx="265" cy="112" r="2.2" fill="var(--hema-deep)"/>
+            <circle cx="285" cy="118" r="2.2" fill="var(--hema-deep)"/>
+            <circle cx="300" cy="112" r="2.2" fill="var(--hema-deep)"/>
+          </g>
+
+          <g class="organelle" data-organ="golgi">
+            <path d="M250,210 q22,-8 44,0" fill="none" stroke="var(--hema)" stroke-width="4"/>
+            <path d="M254,220 q20,-8 40,0" fill="none" stroke="var(--hema)" stroke-width="4"/>
+            <path d="M258,230 q18,-8 36,0" fill="none" stroke="var(--hema)" stroke-width="4"/>
+          </g>
+
+          <g class="organelle" data-organ="mitokondria">
+            <ellipse cx="115" cy="235" rx="26" ry="15" fill="var(--eosin)" transform="rotate(-15 115 235)"/>
+            <path d="M96,235 q6,-9 12,0 q6,9 12,0 q6,-9 12,0" fill="none" stroke="var(--hema-deep)" stroke-width="2" transform="rotate(-15 115 235)"/>
+          </g>
+          <g class="organelle" data-organ="mitokondria">
+            <ellipse cx="305" cy="200" rx="24" ry="14" fill="var(--eosin)" transform="rotate(20 305 200)"/>
+            <path d="M287,200 q6,-8 12,0 q6,8 12,0 q6,-8 12,0" fill="none" stroke="var(--hema-deep)" stroke-width="2" transform="rotate(20 305 200)"/>
+          </g>
+
+          <circle cx="70" cy="130" r="9" fill="var(--hema-soft)" class="organelle" data-organ="lisosom"/>
+          <circle cx="60" cy="160" r="6" fill="var(--hema-soft)" class="organelle" data-organ="lisosom"/>
+
+          <g class="organelle" data-organ="ribosom">
+            <circle cx="190" cy="230" r="2.4" fill="var(--hema-deep)"/>
+            <circle cx="200" cy="240" r="2.4" fill="var(--hema-deep)"/>
+            <circle cx="210" cy="228" r="2.4" fill="var(--hema-deep)"/>
+            <circle cx="185" cy="245" r="2.4" fill="var(--hema-deep)"/>
+            <circle cx="220" cy="240" r="2.4" fill="var(--hema-deep)"/>
+          </g>
+        </svg>
+      </div>
+      <div class="info-panel" id="cellInfo">
+        <h4>Sitoplasma &amp; organel</h4>
+        <p>Klik bagian sel di sebelah kiri — inti, mitokondria, retikulum endoplasma, badan Golgi, lisosom, atau ribosom — untuk membaca fungsinya di sini.</p>
+        <p class="info-hint">Coba mulai dari bagian ungu besar di tengah (inti sel).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="kuis" class="learning-section" hidden>
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">Cek pemahaman</p>
+      <h2>Kuis singkat sitohistologi</h2>
+      <p>Lima pertanyaan, langsung dapat jawaban dan penjelasannya.</p>
+    </div>
+    <div class="quiz-card" id="quizCard"></div>
+  </div>
+</section>
+
+<section id="glosarium" class="learning-section" hidden>
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">Istilah cepat</p>
+      <h2>Glosarium</h2>
+    </div>
+    <div class="gloss" id="glossList"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Materi ringkasan sitohistologi untuk belajar mandiri. Gunakan sebagai pengantar, tetap rujuk buku ajar histologi (mis. Junqueira, Ross) untuk detail klinis.
+  </div>
+</footer>
+
+
+
+
+</div>
+</main>
+
+<footer>
+  <div class="container"><strong>SitoHistoLearn</strong> — Gunakan sebagai pengantar pembelajaran dan tetap rujuk buku teks atau sumber akademik untuk pendalaman materi.</div>
+</footer>
+
+<script>
+  const mainMenu = document.getElementById('menuUtama');
+  const landingHero = document.querySelector('main > .hero');
+  const learningSections = [...document.querySelectorAll('.learning-section')];
+  const projectSections = [...document.querySelectorAll('.project-info')];
+
+  function showMainMenu() {
+    mainMenu.hidden = false;
+    landingHero?.classList.remove('is-hidden');
+    learningSections.forEach(section => { section.hidden = true; });
+    projectSections.forEach(section => { section.hidden = true; });
+    mainMenu.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function openLearningView(id) {
+    const section = document.getElementById(id);
+    if (!section || !section.classList.contains('learning-section')) return;
+    mainMenu.hidden = true;
+    landingHero?.classList.add('is-hidden');
+    learningSections.forEach(item => { item.hidden = item !== section; });
+    projectSections.forEach(item => { item.hidden = true; });
+    if (!section.querySelector('.section-back')) {
+      const back = document.createElement('div');
+      back.className = 'section-back';
+      back.innerHTML = '<button class="back-to-menu" type="button">← Kembali ke menu utama</button>';
+      back.querySelector('button').addEventListener('click', showMainMenu);
+      section.querySelector('.wrap').prepend(back);
+    }
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function openProjectView(id) {
+    const section = document.getElementById(id);
+    if (!section || !section.classList.contains('project-info')) return;
+    mainMenu.hidden = true;
+    landingHero?.classList.add('is-hidden');
+    learningSections.forEach(item => { item.hidden = true; });
+    projectSections.forEach(item => { item.hidden = item !== section; });
+    if (!section.querySelector('.section-back')) {
+      const back = document.createElement('div');
+      back.className = 'section-back';
+      back.innerHTML = '<button class="back-to-menu" type="button">← Kembali ke menu utama</button>';
+      back.querySelector('button').addEventListener('click', showMainMenu);
+      section.querySelector('.wrap').prepend(back);
+    }
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  document.querySelectorAll('[data-open-view]').forEach(button => {
+    button.addEventListener('click', () => openLearningView(button.dataset.openView));
+  });
+  document.querySelectorAll('[data-open-menu]').forEach(button => {
+    button.addEventListener('click', showMainMenu);
+  });
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', event => {
+      const id = link.getAttribute('href').slice(1);
+      if (id === 'top') {
+        event.preventDefault();
+        showMainMenu();
+      } else if (id === 'menuUtama') {
+        event.preventDefault();
+        showMainMenu();
+      } else if (document.getElementById(id)?.classList.contains('project-info')) {
+        event.preventDefault();
+        openProjectView(id);
+      } else if (document.getElementById(id)?.classList.contains('learning-section')) {
+        event.preventDefault();
+        openLearningView(id);
+      }
+    });
+  });
+</script>
+
+<script>
+
+  // Tissue tabs
+  const tabs = document.querySelectorAll('.tabbtn');
+  const panels = document.querySelectorAll('.tissue-panel');
+  tabs.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      tabs.forEach(b=>b.classList.remove('active'));
+      panels.forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-'+btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Cell organelle info
+  const organInfo = {
+    'membran': ['Membran sel', 'Lapisan lipid ganda yang membungkus sel, mengatur zat apa yang boleh keluar-masuk. Bersifat selektif permeabel.'],
+    'nukleus': ['Nukleus (inti sel)', 'Menyimpan materi genetik (DNA) dan mengatur seluruh aktivitas sel. Pada pewarnaan HE, bagian ini tampak ungu-biru karena diikat hematoksilin.'],
+    'nukleolus': ['Nukleolus', 'Struktur padat di dalam inti, tempat berlangsungnya pembentukan ribosom.'],
+    're-kasar': ['Retikulum endoplasma kasar', 'Jaringan membran yang ditempeli ribosom, berfungsi mensintesis dan memproses protein.'],
+    'golgi': ['Badan Golgi', 'Memodifikasi, mengemas, dan mengirim protein serta lipid ke tujuan akhirnya, baik di dalam maupun di luar sel.'],
+    'mitokondria': ['Mitokondria', 'Tempat respirasi seluler menghasilkan energi (ATP). Sering disebut "rumah tenaga sel" karena punya membran ganda dan krista di dalamnya.'],
+    'lisosom': ['Lisosom', 'Kantung berisi enzim pencerna yang memecah limbah sel, organel rusak, atau partikel asing yang masuk ke sel.'],
+    'ribosom': ['Ribosom', 'Tempat berlangsungnya sintesis protein, bisa menempel di retikulum endoplasma atau bebas di sitoplasma.']
+  };
+  document.querySelectorAll('.organelle').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const key = el.dataset.organ;
+      const info = organInfo[key];
+      if(!info) return;
+      document.getElementById('cellInfo').innerHTML =
+        '<h4>'+info[0]+'</h4><p>'+info[1]+'</p>';
+    });
+  });
+
+  // Quiz
+  const questions = [
+    {
+      q: "Zat pewarna manakah yang mengikat inti sel dan membuatnya tampak ungu-biru?",
+      opts: ["Eosin", "Hematoksilin", "Giemsa", "Iodin"],
+      correct: 1,
+      exp: "Hematoksilin bersifat basa dan mengikat asam nukleat (DNA/RNA) di inti sel, menghasilkan warna ungu-biru khas."
+    },
+    {
+      q: "Jaringan manakah yang selnya paling rapat, hampir tanpa matriks ekstraseluler?",
+      opts: ["Jaringan epitel", "Jaringan ikat", "Jaringan otot polos", "Jaringan saraf"],
+      correct: 0,
+      exp: "Jaringan epitel tersusun dari sel yang sangat rapat untuk membentuk lapisan pelindung atau pelapis permukaan."
+    },
+    {
+      q: "Ciri khas otot rangka dibanding otot polos adalah…",
+      opts: [
+        "Berinti satu di tengah sel",
+        "Bekerja sepenuhnya di luar kesadaran",
+        "Bergaris (berstriasi) dan berinti banyak di tepi sel",
+        "Tidak mengandung aktin dan miosin"
+      ],
+      correct: 2,
+      exp: "Otot rangka bersifat bergaris (striated) dengan banyak inti di tepi sel, dan dikendalikan secara sadar."
+    },
+    {
+      q: "Organel yang berfungsi sebagai tempat respirasi seluler dan produksi energi adalah…",
+      opts: ["Lisosom", "Badan Golgi", "Mitokondria", "Ribosom"],
+      correct: 2,
+      exp: "Mitokondria memiliki membran ganda dan krista tempat berlangsungnya respirasi seluler untuk menghasilkan ATP."
+    },
+    {
+      q: "Pewarnaan Papanicolaou (Pap) paling umum digunakan untuk…",
+      opts: [
+        "Mewarnai potongan tulang yang sudah dikalsifikasi",
+        "Skrining sel lepas, misalnya pada tes Pap smear",
+        "Mewarnai serat kolagen pada tendon",
+        "Mendeteksi glikogen dalam jaringan hati"
+      ],
+      correct: 1,
+      exp: "Pewarnaan Pap dirancang untuk sitologi eksfoliatif — melihat sel-sel lepas, seperti pada skrining sel serviks."
+    }
+  ];
+
+  let qIndex = 0, score = 0, answered = false;
+  const quizCard = document.getElementById('quizCard');
+
+  function renderQuiz(){
+    if(qIndex >= questions.length){
+      quizCard.innerHTML =
+        '<p class="quiz-score">Skor kamu: '+score+' / '+questions.length+'</p>'+
+        '<p style="color:var(--ink-soft); margin:0 0 20px;">'+scoreMessage(score)+'</p>'+
+        '<button class="btn btn-primary" id="restartBtn">Ulangi kuis</button>';
+      document.getElementById('restartBtn').addEventListener('click', ()=>{
+        qIndex = 0; score = 0; renderQuiz();
+      });
+      return;
+    }
+    answered = false;
+    const item = questions[qIndex];
+    quizCard.innerHTML =
+      '<p class="quiz-progress">Pertanyaan '+(qIndex+1)+' dari '+questions.length+'</p>'+
+      '<p class="quiz-q">'+item.q+'</p>'+
+      '<div class="quiz-opts">'+
+        item.opts.map((o,i)=>'<button class="quiz-opt" data-i="'+i+'">'+o+'</button>').join('')+
+      '</div>'+
+      '<p class="quiz-feedback" id="quizFeedback"></p>'+
+      '<div class="quiz-nav"><span></span><button class="btn btn-ghost" id="nextBtn" style="display:none;">Lanjut →</button></div>';
+
+    document.querySelectorAll('.quiz-opt').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        if(answered) return;
+        answered = true;
+        const i = parseInt(btn.dataset.i);
+        const opts = document.querySelectorAll('.quiz-opt');
+        opts.forEach(o=>o.setAttribute('disabled','true'));
+        if(i === item.correct){
+          btn.classList.add('correct');
+          score++;
+          document.getElementById('quizFeedback').textContent = 'Benar. ' + item.exp;
+        } else {
+          btn.classList.add('wrong');
+          opts[item.correct].classList.add('correct');
+          document.getElementById('quizFeedback').textContent = 'Belum tepat. ' + item.exp;
+        }
+        document.getElementById('nextBtn').style.display = 'inline-flex';
+      });
+    });
+    document.getElementById('nextBtn').addEventListener('click', ()=>{
+      qIndex++;
+      renderQuiz();
+    });
+  }
+
+  function scoreMessage(s){
+    if(s === questions.length) return "Lengkap! Pemahamanmu tentang sitohistologi dasar sudah solid.";
+    if(s >= questions.length - 1) return "Bagus, tinggal sedikit lagi memantapkan detailnya.";
+    if(s >= questions.length/2) return "Cukup baik — coba baca ulang bagian yang masih terasa asing.";
+    return "Yuk pelajari lagi bagian jaringan dan pewarnaan, lalu coba sekali lagi.";
+  }
+  renderQuiz();
+
+  // Glossary
+  const glossary = [
+    ["Sitologi", "Cabang ilmu yang mempelajari struktur dan fungsi sel secara individual."],
+    ["Histologi", "Cabang ilmu yang mempelajari struktur jaringan dan susunan selnya."],
+    ["Matriks ekstraseluler", "Bahan di luar sel (serat + zat dasar) yang mendominasi volume jaringan ikat."],
+    ["Membran basal", "Lapisan tipis yang menopang jaringan epitel dan memisahkannya dari jaringan ikat di bawahnya."],
+    ["Neuroglia", "Sel pendukung pada jaringan saraf yang tidak menghantarkan impuls, tapi menjaga dan melindungi neuron."],
+    ["Diskus interkalaris", "Sambungan khusus antar sel otot jantung yang membantu sinkronisasi kontraksi."]
+  ];
+  const glossList = document.getElementById('glossList');
+  glossary.forEach((g,i)=>{
+    const div = document.createElement('div');
+    div.className = 'gloss-item';
+    div.innerHTML =
+      '<button class="gloss-q"><span>'+g[0]+'</span><span class="gloss-plus">+</span></button>'+
+      '<div class="gloss-a"><p>'+g[1]+'</p></div>';
+    div.querySelector('.gloss-q').addEventListener('click', ()=>{
+      div.classList.toggle('open');
+    });
+    glossList.appendChild(div);
+  });
+
+</script>
+<script>
+// Fallback interactions for the redesigned shell.
+document.querySelectorAll('.tissue-tabs button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.dataset.target || btn.getAttribute('data-target');
+    document.querySelectorAll('.tissue-tabs button').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tissue-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    if (target) {
+      const panel = document.querySelector(target.startsWith('#') ? target : '#' + target);
+      if (panel) panel.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>
