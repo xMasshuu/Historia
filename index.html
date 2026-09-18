@@ -736,6 +736,14 @@ section {padding:78px 0}
     mainMenu.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
+  function showHomeView() {
+    mainMenu.hidden = false;
+    landingHero?.classList.remove('is-hidden');
+    learningSections.forEach(section => { section.hidden = true; });
+    projectSections.forEach(section => { section.hidden = true; });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   function openLearningView(id) {
     const section = document.getElementById(id);
     if (!section || !section.classList.contains('learning-section')) return;
@@ -781,7 +789,7 @@ section {padding:78px 0}
       const id = link.getAttribute('href').slice(1);
       if (id === 'top') {
         event.preventDefault();
-        showMainMenu();
+        showHomeView();
       } else if (id === 'menuUtama') {
         event.preventDefault();
         showMainMenu();
